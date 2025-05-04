@@ -1,0 +1,98 @@
+**Understanding Percentile-Based Multipliers in Dynamic Pricing**
+
+---
+
+### What Are Percentile-Based Multipliers?
+
+A **percentile-based multiplier** is a value that tells us how a current data point compares to a specific percentile in a dataset. Percentiles are values below which a certain percentage of data falls.
+
+For example:
+
+* The **25th percentile** (Q1) is the value below which 25% of the data lies.
+* The **75th percentile** (Q3) is the value below which 75% of the data lies.
+
+In dynamic pricing, these are used to determine how "unusual" current demand or supply is, relative to typical historical levels.
+
+---
+
+### Why Use Percentile-Based Multipliers?
+
+1. **Normalize dynamic behavior**:
+
+   * Raw demand and supply numbers can vary widely across regions and times.
+   * Percentiles help scale those numbers relative to the dataset's distribution.
+
+2. **Capture extreme scenarios**:
+
+   * If rider demand is higher than 75% of historical demand, it signals high demand.
+   * If driver availability is lower than 25% of historical supply, it signals low supply.
+
+3. **Adapt pricing intelligently**:
+
+   * Prices can rise when demand is high or supply is low, and vice versa.
+
+---
+
+### Real-World Analogy: Student Test Scores
+
+Imagine a class where students take a test. The scores are:
+
+```
+[50, 60, 65, 70, 75, 80, 85, 90, 95]
+```
+
+* 25th percentile (Q1): Below this, 25% of students scored.
+* 75th percentile (Q3): Below this, 75% of students scored.
+
+If a student scores 85:
+
+* This is above the 75th percentile (say it's 80).
+* Their percentile-based multiplier: 85 / 80 = 1.06
+* This tells us their score is 6% above the high-performance threshold.
+
+Similarly, in ride-sharing:
+
+* If 1200 riders request rides, and the 75th percentile is 1000:
+
+  * Multiplier = 1200 / 1000 = 1.2
+  * Demand is 20% higher than usual.
+
+---
+
+### How to Calculate Percentiles (Mathematically)
+
+Given a sorted dataset of N values:
+
+* Percentile rank = $\frac{P}{100} \times (N + 1)$
+* If the rank is not an integer, interpolate between the two nearest data points.
+
+**Example:**
+
+```
+Data: [5, 7, 12, 15, 18, 22, 26, 31]
+N = 8
+```
+
+**25th percentile (P = 25):** $0.25 \times 9 = 2.25$
+
+* Interpolate between 2nd (7) and 3rd (12): $7 + 0.25 \times (12 - 7) = 8.25$
+
+**75th percentile (P = 75):** $0.75 \times 9 = 6.75$
+
+* Interpolate between 6th (22) and 7th (26): $22 + 0.75 \times (26 - 22) = 25$
+
+---
+
+### Summary Table
+
+| Concept              | Meaning                                    |
+| -------------------- | ------------------------------------------ |
+| 25th Percentile (Q1) | Value below which 25% of data falls        |
+| 75th Percentile (Q3) | Value below which 75% of data falls        |
+| Multiplier           | Current value / percentile reference value |
+| High demand          | Demand > 75th percentile                   |
+| Low supply           | Supply < 25th percentile                   |
+
+---
+
+Percentile-based multipliers help create flexible, responsive models that scale across cities and conditions. They allow pricing systems to adjust fairly and adaptively using the actual shape of the data.
